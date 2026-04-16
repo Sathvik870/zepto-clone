@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zepto-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: zepto-backend
+  template:
+    metadata:
+      labels:
+        app: zepto-backend
+    spec:
+      containers:
+      - name: zepto-backend
+        image: sathvikayyasamy/zepto-backend:latest
+        ports:
+        - containerPort: 3000
