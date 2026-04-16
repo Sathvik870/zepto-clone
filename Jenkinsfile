@@ -8,18 +8,28 @@ pipeline {
     stages {
 
         stage('Install Dependencies') {
+ 	    agent {
+               docker {
+                  image 'node:20'
+               }
+            }
             steps {
-                dir('backend') {
-                    sh 'npm install'
-                }
+               dir('backend') {
+                  sh 'npm install'
+               }
             }
         }
 
         stage('Run Tests') {
+            agent {
+               docker {
+                  image 'node:20'
+               }
+            }
             steps {
-                dir('backend') {
-                    sh 'npm test'
-                }
+               dir('backend') {
+                  sh 'npm test'
+               }
             }
         }
 
