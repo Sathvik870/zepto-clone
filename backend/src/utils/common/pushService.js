@@ -1,12 +1,18 @@
 const webpush = require("web-push");
 const db = require("../../config/db");
 const logger = require("../../config/logger");
-if (process.env.NODE_ENV !== "test") {
+if (
+  process.env.VAPID_SUBJECT &&
+  process.env.VAPID_PUBLIC_KEY &&
+  process.env.VAPID_PRIVATE_KEY
+) {
   webpush.setVapidDetails(
     process.env.VAPID_SUBJECT,
     process.env.VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY
   );
+} else {
+  console.warn("VAPID config missing — push notifications disabled");
 }
 
 exports.subscribeCustomer = async (subscription, customerId) => {

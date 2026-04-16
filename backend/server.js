@@ -129,7 +129,7 @@ app.use("/api/public", publicRouter);
 
 
 app.get("/", (req, res) => {
-  res.send("Hello there! Welcome to the Farmer Logistics Backend Server.");
+  res.send("Hello there! Welcome to the Zepto clone Backend Server.");
 });
 
 module.exports = { app, server };
