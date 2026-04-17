@@ -1,12 +1,36 @@
 pipeline {
     agent any
-
+    
+    options {
+        skipDefaultCheckout()
+    }
+    
     environment {
         IMAGE_NAME = "sathvikayyasamy/zepto-backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
+
+	stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+	
+	stage('Pre-check') {
+            steps {
+                script {
+                    def msg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+
+                    if (msg.contains("AUTO-DEPLOY") || msg.contains("[skip ci]")) {
+                        echo "Skipping build — auto commit detected"
+                        currentBuild.result = 'NOT_BUILT'
+                        error("Stopping pipeline early")
+                    }
+                }
+            }
+        }
 
         stage('Install Dependencies') {
  	    agent {
