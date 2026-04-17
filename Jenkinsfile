@@ -20,7 +20,20 @@ pipeline {
                }
             }
         }
-
+	stage('Code Quality - SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                    npm install
+                    npx sonar-scanner \
+                   -Dsonar.projectKey=zepto \
+                   -Dsonar.sources=. \
+                   -Dsonar.host.url=http://host.docker.internal:9000 \
+                   -Dsonar.login=$SONAR_TOKEN
+                   '''
+                }
+            }
+        }
         stage('Run Tests') {
             agent {
                docker {
@@ -42,6 +55,15 @@ pipeline {
             }
         }
 
+	stage('Security Scan - Trivy') {
+            steps {
+               sh '''
+               docker run --rm \
+               -v /var/run/docker.sock:/var/run/docker.sock \
+               aquasec/trivy image --exit-code 1 --severity CRITICAL $IMAGE_NAME:$IMAGE_TAG
+               '''
+            }
+        }
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(
