@@ -88,7 +88,7 @@ pipeline {
         stage('Update GitOps Repo') {
             when {
                not {
-                  changelog '.*Auto update image.*'
+                  changelog '.*AUTO-DEPLOY.*'
                }
             }
 	    steps {
