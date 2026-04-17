@@ -28,10 +28,10 @@ kubectl get pods -A
 
 # Step 7: Start ArgoCD UI port-forward
 echo "👉 Starting ArgoCD UI (https://localhost:8081)..."
-kubectl port-forward svc/argocd-server -n argocd 8081:443 &
+kubectl port-forward svc/argocd-server -n argocd 8081:443 > argocd.log 2>&1 &
 
 # Step 8: Start your app service
 echo "👉 Opening your app..."
-minikube service zepto-service
+minikube service zepto-service --url > service.log 2>&1 &
 
 echo "✅ DevOps Environment Ready!"
