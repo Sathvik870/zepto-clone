@@ -20,18 +20,18 @@ pipeline {
                }
             }
         }
+
 	stage('Code Quality - SonarQube') {
             agent {
                 docker {
-                    image 'node:20'
+                    image 'sonarsource/sonar-scanner-cli:latest'
 		}
 	    }
             steps {
                 dir('backend') {
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                        sh '''
-                       npm install
-                       npx sonar-scanner \
+                       sonar-scanner \
                        -Dsonar.projectKey=zepto \
                        -Dsonar.sources=. \
                        -Dsonar.host.url=http://host.docker.internal:9000 \
