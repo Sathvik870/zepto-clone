@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "sathvikayyasamy/zepto-backend"
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -36,7 +37,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 dir('backend') {
-                    sh 'docker build -t $IMAGE_NAME:latest .'
+                    sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
                 }
             }
         }
@@ -50,7 +51,7 @@ pipeline {
                 )]) {
                     sh '''
                     echo $PASSWORD | docker login -u $USERNAME --password-stdin
-                    docker push $IMAGE_NAME:latest
+                    docker push $IMAGE_NAME:$IMAGE_TAG
                     '''
                 }
             }
@@ -71,11 +72,11 @@ pipeline {
 
                 cd temp-repo
 
-               sed -i "s|image: .*|image: sathvikayyasamy/zepto-backend:latest|" k8s/deployment.yaml
+               sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|g" k8s/deployment.yaml
 
                git add .
-               git commit -m "Auto update image from Jenkins"
-               git push
+               git commit -m "Update image to $IMAGE_TAG"
+               git push origin main
                '''
             }
           }
