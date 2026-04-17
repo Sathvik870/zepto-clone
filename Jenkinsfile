@@ -34,7 +34,7 @@ pipeline {
                        sonar-scanner \
                        -Dsonar.projectKey=zepto \
                        -Dsonar.sources=. \
-                       -Dsonar.host.url=http://host.docker.internal:9000 \
+                       -Dsonar.host.url=http://192.168.49.1:9000 \
                        -Dsonar.login=$SONAR_TOKEN
                        '''
 		    }
