@@ -109,7 +109,7 @@ pipeline {
                 sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|g" k8s/deployment.yaml
 
                 git add .
-                git commit -m "Update image to $IMAGE_TAG"
+                git commit -m "AUTO-DEPLOY: update image to $IMAGE_TAG [skip ci]"
                 git push origin main
                 '''
              }
