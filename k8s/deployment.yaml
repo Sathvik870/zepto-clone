@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: zepto-backend
-        image: sathvikayyasamy/zepto-backend:13
+        image: sathvikayyasamy/zepto-backend:14
         ports:
         - containerPort: 3000
