@@ -86,7 +86,12 @@ pipeline {
             }
         }
         stage('Update GitOps Repo') {
-            steps {
+            when {
+               not {
+                  changelog '.*Auto update image.*'
+               }
+            }
+	    steps {
                 withCredentials([usernamePassword(
                 credentialsId: 'github-creds',
                 usernameVariable: 'GIT_USER',
@@ -101,13 +106,13 @@ pipeline {
 
                 cd temp-repo
 
-               sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|g" k8s/deployment.yaml
+                sed -i "s|image: .*|image: $IMAGE_NAME:$IMAGE_TAG|g" k8s/deployment.yaml
 
-               git add .
-               git commit -m "Update image to $IMAGE_TAG"
-               git push origin main
-               '''
-            }
+                git add .
+                git commit -m "Update image to $IMAGE_TAG"
+                git push origin main
+                '''
+             }
           }
        }
     }
